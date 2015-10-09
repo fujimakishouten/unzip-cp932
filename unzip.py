@@ -11,11 +11,12 @@ import zipfile
 
 parser = argparse.ArgumentParser(description = "Extract zip file includes cp932 encoding file name")
 parser.add_argument("file")
+parser.add_argument("-d", "--directory", nargs="?", type=str, default="")
 args = parser.parse_args()
 
 with zipfile.ZipFile(args.file, 'r') as archive:
     for item in archive.namelist():
-        filename = item.encode("cp437").decode("cp932")
+        filename = os.path.join(args.directory, item.encode("cp437").decode("cp932"))
         directory = os.path.dirname(filename)
 
         if not os.path.exists(directory):
