@@ -5,6 +5,7 @@
 
 
 import argparse
+import chardet
 import os
 import zipfile
 
@@ -16,7 +17,8 @@ args = parser.parse_args()
 
 with zipfile.ZipFile(args.file, 'r') as archive:
     for item in archive.namelist():
-        filename = os.path.join(args.directory, item.encode("cp437").decode("cp932"))
+        encoding = chardet.detect(item.encode("cp437"))
+        filename = os.path.join(args.directory, item.encode("cp437").decode(encoding['encoding']))
         directory = os.path.dirname(filename)
 
         if not os.path.exists(directory):
